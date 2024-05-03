@@ -25,21 +25,21 @@ echo "Running H1emu.com Community Server installer"
 sleep 2
 apt update && apt upgrade -y
 apt install nodejs npm git net-tools software-properties-common nano node-typescript -y
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 160D26BB1785BA38
-add-apt-repository 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/7.0 multiverse' -y
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg --batch --yes -o  /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+apt update
 apt install mongodb-org -y
 clear
 
 # Installing pm2-Dependencies
 echo "Installing MongoDB Web GUI"
-sleep 2
+sleep 3
 systemctl start mongod
 systemctl enable mongod
 npm i pm2 -g
 pm2 kill
 pm2 install pm2-logrotate
-npm i -g mongo-gui@0.0.18
+npm i -g mongo-gui@latest
 pm2 start mongo-gui
 npm cache clean -f
 npm install -g n
